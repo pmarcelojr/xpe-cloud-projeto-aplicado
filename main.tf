@@ -16,23 +16,23 @@ provider "aws" {
   version = "~> 2.36.0"
 }
 
-# Build the VPC
-resource "aws_vpc" "vpc" {
-  cidr_block       = "10.1.0.0/16"
-  instance_tenancy = "default"
+# # Build the VPC
+# resource "aws_vpc" "vpc" {
+#   cidr_block       = "10.1.0.0/16"
+#   instance_tenancy = "default"
 
-  tags = {
-    Name      = "Vpc"
-    Terraform = "true"
-  }
-}
+#   tags = {
+#     Name      = "Vpc"
+#     Terraform = "true"
+#   }
+# }
 
-# Build route table 1
-resource "aws_route_table" "route_table1" {
-  vpc_id = aws_vpc.vpc.id
+# # Build route table 1
+# resource "aws_route_table" "route_table1" {
+#   vpc_id = aws_vpc.vpc.id
 
-  tags = {
-    Name      = "RouteTable1"
-    Terraform = "true"
-  }
-}
+#   tags = {
+#     Name      = "RouteTable1"
+#     Terraform = "true"
+#   }
+# }
