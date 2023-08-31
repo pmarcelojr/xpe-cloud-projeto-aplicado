@@ -120,6 +120,11 @@ jobs:
     environment:
       name: develop
     needs: terraform
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Build and push to dev
         run: |
