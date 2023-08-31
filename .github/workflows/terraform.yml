@@ -56,7 +56,6 @@ jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
-    environment: production
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -114,6 +113,73 @@ jobs:
         run: |
           cd Infra
           terraform fmt -check
+
+  build-dev:
+    name: "Build-Dev"
+    runs-on: ubuntu-latest
+    environment:
+      name: develop
+    needs: terraform
+    steps:
+      - name: Build and push to dev
+        run: |
+          echo "Build and push to dev"
+
+      # Generates an execution plan for Terraform
+      - name: Terraform Plan
+        run: |
+          cd Infra
+          terraform plan -input=false
+
+        # On push to "main", build or change infrastructure according to Terraform configuration files
+        # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          cd Infra
+          terraform apply -auto-approve -input=false
+
+  build-hom:
+    name: "Build-Hom"
+    runs-on: ubuntu-latest
+    environment:
+      name: homolog
+    needs: build-dev
+    steps:
+      - name: Build and push to hom
+        run: |
+          echo "Build and push to hom"
+
+      # Generates an execution plan for Terraform
+      - name: Terraform Plan
+        run: |
+          cd Infra
+          terraform plan -input=false
+
+        # On push to "main", build or change infrastructure according to Terraform configuration files
+        # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          cd Infra
+          terraform apply -auto-approve -input=false
+
+  build-prod:
+    name: "Build-Prod"
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    needs: build-hom
+    steps:
+      - name: Build and push to prod
+        run: |
+          echo "Build and push to prod"
 
       # Generates an execution plan for Terraform
       - name: Terraform Plan
