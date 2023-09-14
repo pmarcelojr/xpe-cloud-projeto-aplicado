@@ -16,7 +16,7 @@ resource "aws_lambda_function" "lambda_function_trigger" {
   filename = "../lambda/code/function.zip"
   # source_code_hash = data.archive_file.python_lambda_package.output_base64sha256
   source_code_hash = filebase64sha256("../lambda/code/function.zip")
-  role             = "arn:aws:iam::890006230292:role/lambda-trigger-mf-banco-do-povo"
+  role             = "arn:aws:iam::890006230292:role/lambda-trigger-mf-banco-do-povo-role"
   runtime          = "python3.9"
   handler          = "function.lambda_function.lambda_handler"
   timeout          = 120
@@ -28,6 +28,8 @@ resource "aws_lambda_function" "lambda_function_trigger" {
       "TBS0MH10" = "movimento_aplicacao_processado"
     }
   }
+
+  depends_on = [aws_iam_role.function_role]
 }
 
 resource "aws_cloudwatch_log_group" "function_log_group" {
@@ -36,6 +38,22 @@ resource "aws_cloudwatch_log_group" "function_log_group" {
   lifecycle {
     prevent_destroy = false
   }
+}
+
+resource "aws_iam_role" "function_role" {
+  name = "lambda-trigger-mf-banco-do-povo-role"
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        Action : "sts:AssumeRole",
+        Effect : "Allow",
+        Principal : {
+          "Service" : "lambda.amazonaws.com"
+        }
+      }
+    ]
+  })
 }
 
 resource "aws_iam_policy" "function_logging_policy" {
@@ -56,6 +74,6 @@ resource "aws_iam_policy" "function_logging_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "function_logging_policy_attachment" {
-  role       = "arn:aws:iam::890006230292:role/lambda-trigger-mf-banco-do-povo"
+  role       = aws_iam_role.function_role.id
   policy_arn = aws_iam_policy.function_logging_policy.arn
 }
