@@ -16,7 +16,7 @@ resource "aws_lambda_function" "lambda_function_trigger" {
   filename = "../lambda/code/function.zip"
   # source_code_hash = data.archive_file.python_lambda_package.output_base64sha256
   source_code_hash = filebase64sha256("../lambda/code/function.zip")
-  role             = aws_iam_role.lambda_role.arn
+  role             = "arn:aws:iam::890006230292:role/lambda-trigger-mf-banco-do-povo"
   runtime          = "python3.9"
   handler          = "function.lambda_function.lambda_handler"
   timeout          = 120
