@@ -20,5 +20,5 @@ provider "aws" {
     Modules
 */
 module "lambda" {
-  source = "./lambda"
+  source = "../lambda"
 }
