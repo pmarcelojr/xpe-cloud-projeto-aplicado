@@ -13,7 +13,7 @@ Arquive the script
 resource "aws_lambda_function" "lambda_function_trigger" {
   function_name = "cargamf-trigger-lambda-banco-do-povo"
 
-  filename = "lambdatrigger.zip"
+  filename = "../lambda/code/function.zip"
   # source_code_hash = data.archive_file.python_lambda_package.output_base64sha256
   source_code_hash = filebase64sha256("../lambda/code/function.zip")
   role             = aws_iam_role.lambda_role.arn
