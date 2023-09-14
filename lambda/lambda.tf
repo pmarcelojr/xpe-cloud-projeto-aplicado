@@ -3,8 +3,8 @@ Arquive the script
 */
 data "archive_file" "python_lambda_package" {
   type        = "zip"
-  source_file = "./code/*"
-  output_path = "lambdatrigger.zip"
+  source_file = "./code/function.zip"
+  # output_path = "lambdatrigger.zip"
 }
 
 /*
