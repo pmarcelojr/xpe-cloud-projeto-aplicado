@@ -21,5 +21,4 @@ provider "aws" {
 */
 module "lambda" {
   source = "./lambda"
-  count  = 0
 }
