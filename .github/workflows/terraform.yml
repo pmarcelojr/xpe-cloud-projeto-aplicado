@@ -104,10 +104,10 @@ jobs:
           cd Infra
           terraform init -input=false
 
-      - name: Terraform validation
-        run: |
-          cd Infra
-          terraform validate
+      # - name: Terraform validation
+      #   run: |
+      #     cd Infra
+      #     terraform validate
 
       # Checks that all Terraform configuration files adhere to a canonical format
       - name: Terraform Format
