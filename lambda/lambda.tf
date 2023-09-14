@@ -40,8 +40,9 @@ resource "aws_cloudwatch_log_group" "function_log_group" {
   }
 }
 
+
 resource "aws_iam_role" "function_role" {
-  name = "lambda-trigger-mf-banco-do-povo-oficial-role"
+  name = "lambda-trigger-mf-banco-do-povo-role"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
