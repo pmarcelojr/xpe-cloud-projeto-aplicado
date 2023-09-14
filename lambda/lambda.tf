@@ -18,7 +18,7 @@ resource "aws_lambda_function" "lambda_function_trigger" {
   source_code_hash = filebase64sha256("../lambda/code/function.zip")
   role             = aws_iam_role.lambda_role.arn
   runtime          = "python3.9"
-  handler          = "lambda_function.lambda_handler"
+  handler          = "function.lambda_function.lambda_handler"
   timeout          = 120
   memory_size      = 128
   description      = "Lambda function to trigger the mainframe data transfer"
